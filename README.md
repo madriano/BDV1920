@@ -1,86 +1,80 @@
 
-VISUALIZATION FOR BIG DATA
-2019-20
-Adriano Lopes
+# BIG DATA VISUALIZATION
+### 2019-20
+### Adriano Lopes
 
-*****************************************************************************************
-IMPORTANT
-*****************************************************************************************
+# Introduction
 
-Before continuing to read this README file, check the labs slides about visualization 
-in a web application
+This is a Docker web app project template
 
-*****************************************************************************************
-Setting up the application
-*****************************************************************************************
+# Pre-requirements
 
-1. Create a directory and put there the given application structure. Let us say the base directory of this application is BDVapp
+Docker is running e.g. via Docker Desktop
 
-2. Open a Terminal window and move to the directory BDVapp -> web
+# Running
 
-3. Initialize a virtual environment e.g. named env. Administrator privileges are required
-to install virtualenv
+We are using docker-compose. Right now, there is just one service.
+But if more are added, e.g. Spark on itself or a database, the we have 
+the template already in place
 
-$ pip3 install virtualenv
+### Make sure docker is running
 
-$ virtualenv –p python3 env
+`$ docker --version`
+   
+### Create and start containers 
+(according to yml specification given - if not, docker-compose.yml would be located in the same directory)
 
-$ source env/bin/activate
+`$ docker-compose up`
 
-If you are using Microsoft Windows, the activation command is:
+    or, if you want to build as well
 
-$ env\Scripts\activate
+`$ docker-compose up --build`
 
-First, a subdirectory env has been created inside airbnbApp and all files associated 
-with the virtual environment will be inside it. Then the virtual environment is activated. 
+See [Docker Compose getting started](https://docs.docker.com/compose/gettingstarted/)
 
-When a virtual environment is activated, the location of its Python interpreter is added to the PATH environment variable in your current command session, which determines where to look for executable files. Notice that the activation command modifies your command prompt to include the name of the environment as:
+# Other Docker related options
+ (some need more checking and adjustment)
 
-(env) $
+### Check what containers are running
 
-After a virtual environment is activated, typing commands will invoke the interpreter from 
-the virtual environment instead of the system-wide interpreter. Having more than one Terminal window implies that we should activate the virtual environment in each of them.
+`$ docker ps`
 
-To restore the PATH environment variable for the Terminal session and the command prompt to their original states, we should invoke:
+### Stop a container
 
-(env) $ deactivate
+`$ docker stop <container ID>`
 
-4. Install the dependencies
+### Having a bash shell to run arbitrary commands inside the container
 
-If a requirements file exists e.g. requirements.txt we can install all the dependencies it relates to:
+`$ docker exec -it <container ID> bash`
 
-$ pip3 install –r requirements.txt
+( to leave the bash use `$ exit` )
 
-But if not, we have to install one by one, as follows:
+### Copy local files to the container
 
-(env) $ pip3 install flask
-(env) $ pip3 install ....
+`$ docker cp <local files> <container ID>:<target dir>`
 
-You can check what packages are installed in the virtual environment at any time using the pip3 freeze command. Hence we can create the requirements file like:
+### Build the image
 
-(env) $ pip3 freeze > requirements.txt
+`$ docker build -t flaskapp app`
 
-*****************************************************************************************
-Purpose and working of this web application
-*****************************************************************************************
+### Run the image
 
-This application is an online data model web service using Spark and Flask
+`$ docker run -it -p 5000:5000 BDVapp` 
 
-The structure is as follows:
+### Deploy the image
 
-TODO
+You can deploy your container if, for instance, you have signed for an account at [Docker Hub](https://hub.docker.com/). Check for instructions there
 
+(image running: bdvapp_webapp)
 
+# Resources
 
-*****************************************************************************************
-FAQ
-*****************************************************************************************
+## Spark
 
-What problem does a virtual environment solve? 
+Since pyspark is available directly via Python's pip, we can avoid setting up a service on its own. As of April 2020, the code is 
 
-The more Python projects you have, the more likely it is that you need to work with different versions of Python libraries, or even Python itself. Newer versions of libraries for one project can break compatibility in another project. Virtual environments are independent groups of Python libraries, one for each project. Packages installed for one project will not affect other projects or the operating system’s packages.
+    spark-2.4.5-bin-hadoop2.7.tgz
 
-Why using a requirements file?
+## Visual Studio Code
 
-It is a good practice for applications to include a requirements file that records all the package dependencies, with the exact version numbers. This is important in case the virtual environment needs to be regenerated on a different machine, such as the machine on which the application will be deployed for production use. 
-
+[Working with containers](https://code.visualstudio.com/docs/containers/overview)

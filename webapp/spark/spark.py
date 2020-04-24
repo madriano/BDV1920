@@ -4,12 +4,6 @@ Spark init operations
 
 from pyspark.sql import SparkSession
 
-
-def stop_spark_session(spark):
-    	
-	spark.stop()
-
-
 def init_spark_session(name): 	
 	
 	# start Spark session 
@@ -20,3 +14,7 @@ def init_spark_session(name):
 
 	return spark
 	#.config("...", "...")
+
+def stop_spark_session(spark):
+    	
+	spark.stop()

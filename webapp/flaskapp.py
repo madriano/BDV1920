@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # variables to hold information
 # if needed move to a new Python module so we can use 
 # them across Python modules
-datasource = os.path.abspath(os.path.dirname(__file__)) + "/spark/data/covid19.csv"
+datasource = os.path.abspath(os.path.dirname(__file__)) + "/datasource/covid19.csv"
 model = None
 simulation = None
 
@@ -25,6 +25,7 @@ simulation = None
 logger.info("Raw data filename " + datasource)
 # get Spark session
 #try:
+
 #except:
 #app.logger.error('Unable to start Spark")
 spark = init_spark_session("BDVapp")

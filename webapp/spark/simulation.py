@@ -1,6 +1,6 @@
 
 """
-Spark example for ml regression (see site)
+Spark example for ml regression (see official site)
 """
 
 # from __future__ import print_function

@@ -38,7 +38,6 @@ class Model:
 			
 		self.confirmed.write.csv(filename)
 		
-
 		
 	def __init__(self, spark, filename):
 			
@@ -48,7 +47,7 @@ class Model:
 		self.rawconfirmed.show(10)
 
 		# process dataframes then store outcome as a SQL table
-		#conf = self.rawconfirmed.drop(['Province/State', 'Lat', 'Long'])
+		# conf = self.rawconfirmed.drop(['Province/State', 'Lat', 'Long'])
 		# TODO: further processing, as wanted
 
 		# register dataframes as a SQL temporary view

@@ -8,7 +8,7 @@ services:
     ports:
         - "5000:5000"
     volumes: 
-        - ./webapp/datasource:/home/bdvapp/webapp/spark/sourcedata/
+        - ./datasource:/home/bdvapp/webapp/datasource/
 
     command: /home/bdvapp/webapp/start.sh
 

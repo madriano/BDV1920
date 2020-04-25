@@ -10,10 +10,10 @@ def init_spark_session(name):
 	spark = SparkSession.builder \
 		.appName(name) \
 		.master('local[*]') \
+		.config('spark.sql.execution.arrow.enabled', 'true') \
 		.getOrCreate()
 
 	return spark
-	#.config("...", "...")
 
 def stop_spark_session(spark):
     	

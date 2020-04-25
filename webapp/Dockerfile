@@ -12,7 +12,7 @@ RUN apt-get update -y; \
 RUN pip install --upgrade pip
 
 # in case we need to convert files from xlsx to csv
-RUN pip install xlsx2csv
+#RUN pip install xlsx2csv
 
 ######################################
 

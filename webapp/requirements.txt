@@ -3,3 +3,5 @@ gunicorn
 numpy
 pandas
 wget
+xlsx2csv
+pyarrow

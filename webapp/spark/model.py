@@ -61,11 +61,7 @@ class Model:
 		# df = self.covid19
 		# then using dataframe operators
 		# or else ...
-		query_str = "SELECT * FROM covid19"
-		df = spark.sql(query_str)
-		# collect (distributed) information to the master
-		# listing = df.toJSON().collect()
-		# or else ...
+		df = spark.sql("SELECT dateRep AS day, cases, deaths, countriesAndTerritories AS country FROM covid19")
 		# collect toPandas - records, columns, or index
 		listing = df.toPandas().to_dict(orient='records') 
 		# converts Python dictionary to final json string
@@ -75,13 +71,10 @@ class Model:
 
 	def filtering_by_country(self, spark, country):
     		
-		#query_str = "SELECT * FROM covid19 WHERE countriesAndTerritories LIKE '%s' ORDER BY dateRep DESC" % (country)
-		query_str = "SELECT * FROM covid19"
-		logger.info(query_str)
-		df = spark.sql(query_str)
-		# some tests so far ..
-		df = df.select(df['dateRep'], df['cases'], df['countriesAndTerritories'])
-		# do some filtering
+		df = spark.sql("SELECT dateRep AS day, cases, deaths, countriesAndTerritories AS country FROM covid19")
+		# some tests ...
+		df = df.filter(df.country.like(country))
+	
 		listing = df.toPandas().to_dict(orient='records') 
 		jsonlisting = json.dumps(listing, indent=2)
 		#logger.info(jsonlisting)

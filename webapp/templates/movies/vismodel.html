@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "../layout.html" %}
 
 {% block pagestyles %}
 
@@ -25,7 +25,9 @@
 
 <div class="jumbotron text-center" style="margin-bottom:0">
     <h1>Big Data Visualization</h1>
-    <p>Visualizing multivariate-data with D3</p>
+    <h2>App: Movies</h2>
+    <p>Web app template to visualise data with D3</p>
+    <p>Data processing with Apache Spark</p>
 </div>
 
 <!-- Navigation -->
@@ -49,8 +51,8 @@
 <div class="container" style="margin-top:30px">
 
     <div class="col-sm-8" id="filtering_id">
-        <h5>Data to visualize</h5>
-        <form action="/filtering" method="POST">
+        <h5>Example of UI</h5>
+        <form action="/sim" method="POST">
             <div class="container">
                 <select>
                     <option selected value="1">All countries/regions</option>

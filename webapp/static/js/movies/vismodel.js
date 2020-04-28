@@ -3,26 +3,21 @@
 // with strict mode, you can not, for example, use undeclared variables
 // visualization will be hold in the div with id=vis1_id
 
-const margin = { top: 20, right: 160, bottom: 35, left: 30 };
+// set the dimensions and margins of the graph
+const margin = { top: 20, right: 100, bottom: 30, left: 30 };
+const width = 800 - margin.left - margin.right,
+  height = 400 - margin.top - margin.bottom;
 
-const width = 960 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+var parseTime = d3.parseTime("%m-%d-y")
 
-// Data in strings like it would be if imported from a csv
-
-// var parse = d3.time.format("%Y").parse;
+// ex. of data: [{day: "04-23-20", cases: 84, deaths: 4, country: "Afghanistan"}, ...]
 
 function drawMultiseries(data) {
 
   console.log(data)
 
-  // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 100, bottom: 30, left: 30 },
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
   // append the svg object to the body of the page
-  var svg = d3.select("body").select("#vis2_id")
+  var svg = d3.select("body").select("#vis1_id")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -30,32 +25,34 @@ function drawMultiseries(data) {
     .attr("transform",
       "translate(" + margin.left + "," + margin.top + ")");
 
-  // List of groups (here I have one group per column)
-  var allGroup = ["Portugal", "France"]
+  // list of groups (one group per column)
+  var groups = ["Portugal", "Spain", "France", "Germany"]
 
-  // Reformat the data: we need an array of arrays of {x, y} tuples
-  var dataReady = allGroup.map(function (grpName) { // .map allows to do something for each element of the list
-    const series = data[grpName]
-    const keys = Object.keys(series)
-    for (const key in keys) {
-      console.log(key)
-    }
+  // reformat the data: we need an array of arrays of {x, y} tuples
+
+  // TODO: optimize code to be faster
+  var dataReady = groups.map(name => { 
+    let values = []
+    data.forEach(d => {
+      if (d.country == name) {
+        values.push({time: parseTime(d.day), value: +d.cases})
+      }
+    })
     return {
-      name: grpName,
-      values: keys.map(function (d) {
-        return { time: d, value: +series[d] };
-      })
-    };
-  });
-  // I strongly advise to have a look to dataReady
-  // console.log(dataReady)
+      name: name,
+      values: values
+    }
+  })
 
-  // A color scale: one color for each group
+  // have a look at dataReady
+  console.log(dataReady)
+
+  // color scale: one color for each group
   var myColor = d3.scaleOrdinal()
     .domain(allGroup)
     .range(d3.schemeSet2);
 
-  // Add X axis --> it is a date format
+  // X axis --> it is a date format
   var x = d3.scaleLinear()
     .domain([0, 10])
     .range([0, width]);
@@ -63,14 +60,14 @@ function drawMultiseries(data) {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
 
-  // Add Y axis
+  // Y axis
   var y = d3.scaleLinear()
     .domain([0, 20])
     .range([height, 0]);
   svg.append("g")
     .call(d3.axisLeft(y));
 
-  // Add the lines
+  // lines
   var line = d3.line()
     .x(function (d) { return x(+d.time) })
     .y(function (d) { return y(+d.value) })
@@ -84,16 +81,16 @@ function drawMultiseries(data) {
     .style("stroke-width", 4)
     .style("fill", "none")
 
-  // Add the points
+  // points
   svg
-    // First we need to enter in a group
+    // first we need to enter in a group
     .selectAll("myDots")
     .data(dataReady)
     .enter()
     .append('g')
     .style("fill", function (d) { return myColor(d.name) })
     .attr("class", function (d) { return d.name })
-    // Second we need to enter in the 'values' part of this group
+    // second we need to enter in the 'values' part of this group
     .selectAll("myPoints")
     .data(function (d) { return d.values })
     .enter()
@@ -103,7 +100,7 @@ function drawMultiseries(data) {
     .attr("r", 5)
     .attr("stroke", "white")
 
-  // Add a label at the end of each line
+  // label at the end of each line
   svg
     .selectAll("myLabels")
     .data(dataReady)
@@ -118,7 +115,7 @@ function drawMultiseries(data) {
     .style("fill", function (d) { return myColor(d.name) })
     .style("font-size", 15)
 
-  // Add a legend (interactive)
+  // legend (interactive)
   svg
     .selectAll("myLegend")
     .data(dataReady)
@@ -133,7 +130,8 @@ function drawMultiseries(data) {
     .on("click", function (d) {
       // is the element currently visible ?
       currentOpacity = d3.selectAll("." + d.name).style("opacity")
-      // Change the opacity: from 0 to 1 or from 1 to 0
+      // change the opacity: from 0 to 1 or from 1 to 0
       d3.selectAll("." + d.name).transition().style("opacity", currentOpacity == 1 ? 0 : 1)
     })
+
 }

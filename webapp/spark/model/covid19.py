@@ -5,11 +5,8 @@ from __future__ import print_function
 
 from pyspark.sql.types import *
 
-#import numpy as np
 import pandas
 import json
-#import glob
-#import os
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +19,7 @@ logger = logging.getLogger(__name__)
 # 	countryterritoryCode, popData2018, continentExp
 #######################################################
 	
-class Model:
+class Covid19Model:
 	
 	def read_data(self, spark, filename):
 			
@@ -31,8 +28,8 @@ class Model:
 	
 	def write_rawdata(self, spark, filename):
 			
-		self.rawcovid19.coalesce(1).write.csv(filename)  # all together as one file
-
+		# all together as 1 file
+		self.rawcovid19.coalesce(1).write.csv(filename)  
 	
 	def write_data(self, spark, filename):
 			
@@ -46,7 +43,7 @@ class Model:
 		
 		self.read_data(spark, filename)
 		
-		# process dataframes then store outcome as a SQL table
+		# process dataframe then store outcome as a SQL table
 		# (further processing, if wanted)
 		self.covid19 = self.rawcovid19.drop("day", "month", "year", "geoId", "countryterritoryCode", "continentExp")
 		#self.covid19.cache
@@ -70,14 +67,11 @@ class Model:
 		return jsonlisting
 
 	def filtering_by_country(self, spark, country):
-    		
+
 		df = spark.sql("SELECT dateRep AS day, cases, deaths, countriesAndTerritories AS country FROM covid19")
-		# some tests ...
-		df = df.filter(df.country.like(country))
-	
+		df = df.filter(df.country.like(str(country)))
 		listing = df.toPandas().to_dict(orient='records') 
 		jsonlisting = json.dumps(listing, indent=2)
-		#logger.info(jsonlisting)
 		return jsonlisting
 
 

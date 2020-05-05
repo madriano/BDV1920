@@ -21,11 +21,12 @@ logger = logging.getLogger(__name__)
 	
 class Covid19Model:
 	
-	def read_data(self, spark, filename):
+	def read_data(self, spark, filename, filelatlng):
 			
 		self.rawcovid19 = spark.read.csv(filename, sep=",", inferSchema="true", header="true")
+		self.latlng = spark.read.csv(filelatlng, sep=",", inferSchema="true", header="true")
 		
-	
+		
 	def write_rawdata(self, spark, filename):
 			
 		# all together as 1 file
@@ -36,16 +37,16 @@ class Covid19Model:
 		self.covid19.write.csv(filename)
 		
 		
-	def __init__(self, spark, filename):
+	def __init__(self, spark, filename, filelatlng):
 			
 		logger.info(" Data model will be from: "+filename)
 		# recall that Spark follows lazy computation
 		
-		self.read_data(spark, filename)
+		self.read_data(spark, filename, filelatlng)
 		
 		# process dataframe then store outcome as a SQL table
 		# (further processing, if wanted)
-		self.covid19 = self.rawcovid19.drop("day", "month", "year", "geoId", "countryterritoryCode", "continentExp")
+		self.covid19 = self.rawcovid19.drop("day", "month", "year", "countryterritoryCode", "continentExp")
 		#self.covid19.cache
 		# register dataframes as a SQL temporary view
 		self.covid19.createOrReplaceTempView("covid19")
@@ -58,13 +59,13 @@ class Covid19Model:
 		# df = self.covid19
 		# then using dataframe operators
 		# or else ...
-		df = spark.sql("SELECT dateRep AS day, cases, deaths, countriesAndTerritories AS country FROM covid19")
+		df = spark.sql("SELECT dateRep AS day, cases, deaths, geoID, countriesAndTerritories AS country FROM covid19")
 		# collect toPandas - records, columns, or index
 		listing = df.toPandas().to_dict(orient='records') 
-		# converts Python dictionary to final json string
-		jsonlisting = json.dumps(listing, indent=2)
-		#logger.info(jsonlisting)
-		return jsonlisting
+		geolocation = self.latlng.toPandas().to_dict(orient='records') 	
+		# converts to final json string
+		jsoninfo = json.dumps([listing, geolocation], indent=2)
+		return jsoninfo
 
 	def filtering_by_country(self, spark, country):
 

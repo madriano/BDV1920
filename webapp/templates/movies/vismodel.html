@@ -75,6 +75,7 @@
 
     <br>
     <div class="row" id="vis1_id"></div>
+    <br>
     <div class="row" id="vis2_id"></div>
     <br>
 
@@ -93,6 +94,8 @@
 
     <!-- for D3 visualization -->
     <!-- <script src="https://d3js.org/d3.v5.js"></script> -->
+    <!-- note: if wanted, the line above can be moved to the layout.html file -->
+    
     <script src="{{ url_for('static', filename='dist/js/d3.min.js') }}"></script>
 
     <!-- our own JavaScript functions -->
@@ -101,7 +104,7 @@
     <!-- this is where data is passed from Flask templates to our js code -->
     
     <script>
-        drawMultiseries([{{ data | safe }}]);
+        // TODO .... ([{{ data | safe }}]);
     </script>
 
 {% endblock %}

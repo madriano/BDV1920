@@ -11,6 +11,10 @@ This is a Docker web app project template
 
 Docker is running e.g. via Docker Desktop
 
+# Important notice
+
+The file script "start.sh" was created in a Mac OS machine. In case of using a Windows machine, we should create your own "start.sh" file and write down its content by yourself
+
 # Running
 
 We are using docker-compose. Right now, there is just one service.

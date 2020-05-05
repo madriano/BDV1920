@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 # variables to hold/control information
 datasource = os.path.abspath(os.path.dirname(__file__)) + "/datasource/covid19.csv"
+datalatlng = os.path.abspath(os.path.dirname(__file__)) + "/datasource/latlng.csv"
 logger.info(" Raw data filename will be: " + datasource)
 model = None
 spark = init_spark_session("BDVapp")
@@ -36,8 +37,8 @@ def home():
 def model():
     # create model
 	logger.info(" ROUTE: /mod => Create model")
-	global spark, datasource, model
-	model = Covid19Model(spark, datasource)
+	global spark, datasource, datalatlng, model
+	model = Covid19Model(spark, datasource, datalatlng)
 
 	return render_template('covid19/model.html',
 							title='Big Data Visualization',

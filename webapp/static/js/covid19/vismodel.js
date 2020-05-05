@@ -1,7 +1,7 @@
 'use strict';
 
 // with strict mode, you can not, for example, use undeclared variables
-// visualization will be hold in the div with id=vis1_id
+// visualization will be held in the div with id=vis1_id
 
 // set the dimensions and margins of the graph
 const margin = { top: 30, right: 300, bottom: 30, left: 60 };
@@ -13,7 +13,9 @@ const width = 1000 - margin.left - margin.right,
 function drawMultiseries(data) {
 
   //console.log(data)
-  const mydata = data[0]
+  const dd = data[0]
+  const mydata = dd[0]
+  //console.log(mydata)
 
   var parser = d3.timeParse("%m-%d-%y")
 
